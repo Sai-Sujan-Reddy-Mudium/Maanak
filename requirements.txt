@@ -1,0 +1,7 @@
+PyMuPDF>=1.23.0
+pinecone>=4.0.0
+sentence-transformers>=2.2.2
+openai>=1.10.0
+pydantic>=2.0.0
+python-dotenv>=1.0.0
+pymupdf4llm

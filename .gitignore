@@ -1,0 +1,38 @@
+# Environment Variables
+.env
+
+# Python Cache and Bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environments
+venv/
+.venv/
+env/
+.env/
+
+# Mac OS
+.DS_Store
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+
+# Project Data & Generated Files
+# Explicitly requested:
+data/bm25_index.pkl
+
+# Pipeline output files (to avoid committing large datasets/models)
+# We allow data/metadata/sparse_encoder.pkl to be tracked because it is tiny!
+data/metadata/chunks_dataset.json
+data/processed_chunks/*.md
+data/raw_pdfs/*.pdf
+
+# Logs and Caches
+*.log
+.cache/
+.pytest_cache/
+.mypy_cache/
