@@ -1,11 +1,31 @@
+import sys
+import os
+
+# Inject DataIngestion globally so rag_engine is resolvable everywhere
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+data_ingestion_path = os.path.join(BASE_DIR, "DataIngestion")
+if data_ingestion_path not in sys.path:
+    sys.path.append(data_ingestion_path)
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
+
 from app.api.v1.chat import router as chat_router
+from rag_engine.retrieval.retriever import load_resources
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("[Main] Initializing pre-loaded models (SentenceTransformer, CrossEncoder, Pinecone)...")
+    load_resources()
+    yield
+    print("[Main] Shutting down.")
 
 app = FastAPI(
     title="Maanak API",
     description="Resilient AI RAG API Backend for Compliance & Standards Intelligence",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 # --- CORS MIDDLEWARE CONFIGURATION ---
