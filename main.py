@@ -2,7 +2,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1.chat import router as chat_router
 
-app = FastAPI(title="Maanak API")
+app = FastAPI(
+    title="Maanak API",
+    description="Resilient AI RAG API Backend for Compliance & Standards Intelligence",
+    version="1.0.0"
+)
 
 # --- CORS MIDDLEWARE CONFIGURATION ---
 origins = [
@@ -17,6 +21,14 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# --- HEALTH CHECK ENDPOINT ---
+@app.get("/health", tags=["Health"])
+async def health_check():
+    """
+    Health check endpoint for Docker container health monitoring and cloud load balancers.
+    """
+    return {"status": "healthy", "service": "Maanak API"}
 
 # --- ROUTER REGISTRATION ---
 app.include_router(chat_router, prefix="/api/v1", tags=["Chat"])

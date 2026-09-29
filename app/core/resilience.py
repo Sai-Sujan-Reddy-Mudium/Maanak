@@ -1,13 +1,19 @@
 import functools
 import json
+import inspect
 from app.core.config import settings
 
 def with_failover(func):
     """
     Resiliency Engine Decorator.
     Wraps an async generator function, catching API rate limits and cycling through backup keys from settings.
-    If all keys fail, yields a graceful fallback SSE chunk.
+    Safely injects 'current_key' if accepted by the target function.
     """
+    sig = inspect.signature(func)
+    accepts_key = "current_key" in sig.parameters or any(
+        p.kind == inspect.Parameter.VAR_KEYWORD for p in sig.parameters.values()
+    )
+
     @functools.wraps(func)
     async def wrapper(*args, **kwargs):
         for api_key in settings.OPENROUTER_KEYS:
@@ -15,7 +21,8 @@ def with_failover(func):
                 print(f"\n[FAILOVER ENGINE] Attempting generation with key: {api_key}")
                 
                 kwargs_copy = kwargs.copy()
-                kwargs_copy["current_key"] = api_key
+                if accepts_key:
+                    kwargs_copy["current_key"] = api_key
                 
                 async for chunk in func(*args, **kwargs_copy):
                     yield chunk
