@@ -81,7 +81,7 @@ async def chat_stream_endpoint(request: ChatRequest, req: Request):
             final_text = translated_text
             
         # Post-completion DB Log
-        asyncio.create_task(
+        def _log_sync():
             log_chat_to_db(
                 session_id=request.session_id,
                 query=native_text,
@@ -89,7 +89,8 @@ async def chat_stream_endpoint(request: ChatRequest, req: Request):
                 citations=final_citations,
                 role=user_role
             )
-        )
+            
+        asyncio.create_task(asyncio.to_thread(_log_sync))
 
     return StreamingResponse(sse_generator(), media_type="text/event-stream")
 

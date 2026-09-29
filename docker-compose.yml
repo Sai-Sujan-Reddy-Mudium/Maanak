@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: maanak_backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - hf_cache_volume:/app/models
+    restart: unless-stopped
+
+volumes:
+  hf_cache_volume:
+    name: maanak_hf_cache

@@ -1,27 +1,77 @@
-# Virtual Environment
-venv/
-ENV/
-env/
-
-# Environment Variables & Secrets
+# ==============================
+# Environment & Sensitive Files
+# ==============================
 .env
-*.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
 
-# Python Bytecode & Caches
+# ==============================
+# Python Caches & Virtual Envs
+# ==============================
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
+venv/
+env/
+.venv/
+.env/
+pip-log.txt
+pip-delete-this-directory.txt
 
-# IDE & Editor files
+# ==============================
+# HuggingFace & Machine Learning
+# ==============================
+hf_cache/*
+!hf_cache/.gitkeep
+.huggingface/
+*.safetensors
+*.pt
+*.bin
+*.onnx
+
+# ==============================
+# Data Ingestion & Temp Data
+# ==============================
+# Avoid tracking raw PDFs, chunked markdown, and ML pickle vectors
+DataIngestion/data/raw_pdfs/*.pdf
+DataIngestion/data/processed_chunks/*.md
+DataIngestion/data/metadata/*.pkl
+DataIngestion/data/metadata/*.json
+
+# ==============================
+# Node.js & Frontend (Next.js)
+# ==============================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.next/
+out/
+build/
+dist/
+
+# ==============================
+# OS & IDE Files
+# ==============================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# OS files
-Thumbs.db
-Desktop.ini
-.DS_Store
-
-# Log files
-*.log
+# ==============================
+# Temporary Scratch Folders
+# ==============================
+scratch/*
+!scratch/.gitkeep

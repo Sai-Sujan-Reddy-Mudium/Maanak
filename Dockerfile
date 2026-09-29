@@ -16,14 +16,17 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application source code
 COPY . .
 
-# Set ownership to appuser
-RUN chown -R appuser:appuser /app
+# Set ownership to appuser and ensure models directory exists for the volume mount
+RUN mkdir -p /app/models && chown -R appuser:appuser /app
 
 # Switch to non-root user
 USER appuser
 
 # Expose port 8000 for incoming traffic
 EXPOSE 8000
+
+# Set HuggingFace Cache Directory to a persistent volume path
+ENV HF_HOME=/app/models
 
 # Command to launch FastAPI with Uvicorn
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2"]
